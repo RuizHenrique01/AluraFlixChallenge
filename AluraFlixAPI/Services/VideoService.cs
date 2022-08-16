@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using AluraFlixAPI.Data;
 using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Models;
@@ -31,5 +34,36 @@ namespace AluraFlixAPI.Services{
            return _mapper.Map<ReadVideoDto>(video);
         }
 
+        public List<ReadVideoDto> FindAllVideos()
+        {
+            List<Video> videos = _context.Videos.ToList();
+            return _mapper.Map<List<ReadVideoDto>>(videos);
+        }
+
+        public Result UpdateVideo(int id, UpdateVideoDto updateVideoDto)
+        {
+            Video video = _context.Videos.Find(id);
+
+            if(video == null) 
+                return Result.Fail("Video não encontrado.");
+
+            _mapper.Map(updateVideoDto, video);
+            _context.SaveChanges();
+
+            return Result.Ok();
+        }
+
+        public Result DeleteVideo(int id)
+        {
+            Video video = _context.Videos.Find(id);
+
+            if(video == null) 
+                return Result.Fail("Video não encontrado.");
+
+            _context.Videos.Remove(video);
+            _context.SaveChanges();
+
+            return Result.Ok();
+        }
     }
 }
