@@ -41,8 +41,8 @@ namespace AluraFlixAPI.Controllers{
         }
 
         [HttpGet]
-        public IActionResult FindAllVideos(){
-            List<ReadVideoDto> readVideoDto = _videoService.FindAllVideos();
+        public IActionResult FindAllVideos([FromQuery] string search){
+            List<ReadVideoDto> readVideoDto = _videoService.FindAllVideos(search);
             return Ok(readVideoDto);
         }
 

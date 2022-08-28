@@ -34,9 +34,16 @@ namespace AluraFlixAPI.Services{
            return _mapper.Map<ReadVideoDto>(video);
         }
 
-        public List<ReadVideoDto> FindAllVideos()
+        public List<ReadVideoDto> FindAllVideos(string search = null)
         {
-            List<Video> videos = _context.Videos.ToList();
+            List<Video> videos = new List<Video>();
+            if (search != null)
+            {
+                videos = _context.Videos.Where(x => x.Titulo.ToUpper().Contains(search.ToUpper())).ToList();
+                return _mapper.Map<List<ReadVideoDto>>(videos);
+            }
+
+            videos = _context.Videos.ToList();
             return _mapper.Map<List<ReadVideoDto>>(videos);
         }
 
