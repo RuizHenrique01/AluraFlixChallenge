@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace AluraFlixAPI.Models
 {
@@ -13,5 +15,7 @@ namespace AluraFlixAPI.Models
         [Required]
         [RegularExpression("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$", ErrorMessage = "Invalid Format")]
         public string Cor { get; set; }
+        [JsonIgnore]
+        public virtual List<Video> Videos { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace AluraFlixAPI.Models {
@@ -15,5 +16,10 @@ namespace AluraFlixAPI.Models {
         [Required]
         [Url]
         public string Url { get; set; }
+        [Required]
+        [DefaultValue(1)]
+        public int CategoriaId { get; set; }
+        public virtual Categoria Categoria { get; set; }
+
     }
 }
