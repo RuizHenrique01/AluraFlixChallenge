@@ -2,6 +2,8 @@
 using AluraFlixAPI.Data.Dtos.Categoria;
 using AluraFlixAPI.Models;
 using AutoMapper;
+using FluentResults;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AluraFlixAPI.Services
@@ -31,6 +33,38 @@ namespace AluraFlixAPI.Services
         {
             Categoria categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
             return _mapper.Map<ReadCategoriaDto>(categoria);
+        }
+
+        public List<ReadCategoriaDto> FindAllCategorias()
+        {
+            List<Categoria> categorias = _context.Categorias.ToList();
+            return _mapper.Map<List<ReadCategoriaDto>>(categorias);
+        }
+
+        public Result UpdateCategoria(int id, UpdateCategoriaDto updateCategoriaDto)
+        {
+            Categoria categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
+
+            if (categoria == null)
+                return Result.Fail("Categoria não encontrada");
+
+            _mapper.Map(updateCategoriaDto, categoria);
+            _context.SaveChanges();
+
+            return Result.Ok();
+        }
+
+        public Result RemoveCategoria(int id)
+        {
+            Categoria categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
+
+            if (categoria == null)
+                return Result.Fail("Categoria não encontrada");
+
+            _context.Categorias.Remove(categoria);
+            _context.SaveChanges();
+
+            return Result.Ok();
         }
     }
 }
