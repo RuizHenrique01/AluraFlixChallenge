@@ -31,6 +31,7 @@ namespace AluraFlixAPI
         {
             services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("AluraFlixConnection"), ServerVersion.AutoDetect(Configuration.GetConnectionString("AluraFlixConnection"))));
             services.AddScoped<VideoService, VideoService>();
+            services.AddScoped<CategoriaService, CategoriaService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
