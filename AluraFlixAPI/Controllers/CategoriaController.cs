@@ -34,6 +34,15 @@ namespace AluraFlixAPI.Controllers
             return Ok(readCategoriaDto);
         }
 
+        [HttpGet("{id}/videos")]
+        public IActionResult FindOneCategoriaAndVideos(int id)
+        {
+            ReadCategoriaVideosDto readCategoriaVideosDto = _categoriaService.FindOneCategoriaVideos(id);
+
+            if (readCategoriaVideosDto == null) return NotFound("Categoria não encontrada");
+            return Ok(readCategoriaVideosDto);
+        }
+
         [HttpGet]
         public IActionResult FindAllCategoria()
         {

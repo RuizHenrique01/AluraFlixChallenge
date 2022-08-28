@@ -3,6 +3,7 @@ using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Models;
 using AutoMapper;
 using FluentResults;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,6 +66,12 @@ namespace AluraFlixAPI.Services
             _context.SaveChanges();
 
             return Result.Ok();
+        }
+
+        public ReadCategoriaVideosDto FindOneCategoriaVideos(int id)
+        {
+            Categoria categoria = _context.Categorias.FirstOrDefault(c => c.Id == id);
+            return _mapper.Map<ReadCategoriaVideosDto>(categoria);
         }
     }
 }
