@@ -1,5 +1,5 @@
 ﻿using AluraFlixAPI.Data;
-using AluraFlixAPI.Data.Dtos.Categoria;
+using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Models;
 using AutoMapper;
 using FluentResults;

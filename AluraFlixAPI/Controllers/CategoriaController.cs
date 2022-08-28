@@ -1,5 +1,4 @@
 ﻿using AluraFlixAPI.Data.Dtos;
-using AluraFlixAPI.Data.Dtos.Categoria;
 using AluraFlixAPI.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AluraFlixAPI.Data.Dtos.Categoria
+namespace AluraFlixAPI.Data.Dtos
 {
     public class UpdateCategoriaDto
     {

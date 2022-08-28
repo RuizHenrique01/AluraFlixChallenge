@@ -1,3 +1,5 @@
+using AluraFlixAPI.Models;
+
 namespace AluraFlixAPI.Data.Dtos {
 
     public class ReadVideoDto {
@@ -5,5 +7,6 @@ namespace AluraFlixAPI.Data.Dtos {
         public string Titulo { get; set; }
         public string Descricao { get; set; }
         public string Url { get; set; }
+        public Categoria Categoria { get; set; }
     }
 }

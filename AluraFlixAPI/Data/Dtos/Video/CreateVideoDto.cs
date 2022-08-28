@@ -12,5 +12,7 @@ namespace AluraFlixAPI.Data.Dtos {
         [Required(ErrorMessage = "Url é um campo obrigatório")]
         [Url]
         public string Url { get; set; }
+        [Required(ErrorMessage = "Categoria é um campo obrigatório")]
+        public int CategoriaId { get; set; }
     }
 }
