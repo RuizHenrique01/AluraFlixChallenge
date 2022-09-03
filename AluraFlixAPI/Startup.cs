@@ -7,6 +7,7 @@ using AluraFlixAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -30,6 +31,8 @@ namespace AluraFlixAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("AluraFlixConnection"), ServerVersion.AutoDetect(Configuration.GetConnectionString("AluraFlixConnection"))));
+            services.AddIdentity<IdentityUser<int>, IdentityRole<int>>()
+                .AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<VideoService, VideoService>();
             services.AddScoped<CategoriaService, CategoriaService>();
             services.AddControllers();

@@ -1,9 +1,11 @@
 using AluraFlixAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace AluraFlixAPI.Data{
 
-    public class AppDbContext : DbContext {
+    public class AppDbContext : IdentityDbContext<IdentityUser<int>, IdentityRole<int>, int>{
 
         public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt) {
 
