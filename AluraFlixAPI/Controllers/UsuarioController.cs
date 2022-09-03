@@ -1,6 +1,7 @@
 ﻿using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AluraFlixAPI.Controllers
@@ -31,8 +32,17 @@ namespace AluraFlixAPI.Controllers
         {
             Result result = _usuarioService.Login(loginRequest);
             if (result.IsFailed) return BadRequest(result.Errors[0]);
-            return Ok();
+            return Ok(result.Successes[0]);
+        }
 
+        [Route("/logout")]
+        [HttpPost]
+        [Authorize(Roles = "admin, regular")]
+        public IActionResult LogoutUsuario()
+        {
+            Result result = _usuarioService.Logout();
+            if (result.IsFailed) return Unauthorized(result.Errors[0]);
+            return Ok(result.Successes);
         }
     }
 }

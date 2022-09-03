@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Data;
 using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Services;
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AluraFlixAPI.Controllers{
@@ -17,6 +19,7 @@ namespace AluraFlixAPI.Controllers{
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public IActionResult CreateVideo([FromBody] CreateVideoDto createVideoDto){
             if(createVideoDto.CategoriaId != 0)
             {
@@ -33,6 +36,7 @@ namespace AluraFlixAPI.Controllers{
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "admin, regular")]
         public IActionResult FindOneVideo(int id){
             ReadVideoDto readVideoDto = _videoService.FindOneVideo(id);
 
@@ -41,12 +45,14 @@ namespace AluraFlixAPI.Controllers{
         }
 
         [HttpGet]
+        [Authorize(Roles = "admin, regular")]
         public IActionResult FindAllVideos([FromQuery] string search){
             List<ReadVideoDto> readVideoDto = _videoService.FindAllVideos(search);
             return Ok(readVideoDto);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult UpdateVideo(int id, [FromBody] UpdateVideoDto updateVideoDto){
             if (updateVideoDto.CategoriaId != 0)
             {
@@ -64,6 +70,7 @@ namespace AluraFlixAPI.Controllers{
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
         public IActionResult DeleteVideo(int id){
             Result result = _videoService.DeleteVideo(id);
             if(result.IsFailed) return NotFound(result.Errors[0].Message);

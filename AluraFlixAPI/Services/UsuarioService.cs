@@ -4,6 +4,7 @@ using AutoMapper;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AluraFlixAPI.Services
@@ -13,20 +14,23 @@ namespace AluraFlixAPI.Services
         private UserManager<IdentityUser<int>> _userManager;
         private SignInManager<IdentityUser<int>> _signInManager;
         private IMapper _mapper;
+        private TokenService _tokenService;
 
-        public UsuarioService(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, IMapper mapper)
+        public UsuarioService(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, IMapper mapper, TokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         public Result CreateUsuario(CreateUsuarioDto createUsuarioDto)
         {
             Usuario usuario = _mapper.Map<Usuario>(createUsuarioDto);
             IdentityUser<int> identityUser = _mapper.Map<IdentityUser<int>>(usuario);
-            Task<IdentityResult> identityResult = _userManager.CreateAsync(identityUser, createUsuarioDto.Password);
-            if (identityResult.Result.Succeeded) return Result.Ok();
+            var identityResult = _userManager.CreateAsync(identityUser, createUsuarioDto.Password).Result;
+            var userRole = _userManager.AddToRoleAsync(identityUser, "regular").Result;
+            if (identityResult.Succeeded) return Result.Ok();
             return Result.Fail("Erro ao criar usuário!");
         } 
 
@@ -44,11 +48,22 @@ namespace AluraFlixAPI.Services
             if (result.Result.Succeeded)
             {
 
-                return Result.Ok();
+                var roleIdentity = _signInManager.UserManager.GetRolesAsync(user.Result).Result.FirstOrDefault();
+
+                Token token = _tokenService.CreateToken(user.Result, roleIdentity);
+
+                return Result.Ok().WithSuccess(token.Value);
 
             }
 
             return Result.Fail("Email/senha incorreto!");
+        }
+
+        public Result Logout()
+        {
+            var resultado = _signInManager.SignOutAsync();
+            if (resultado.IsCompletedSuccessfully) return Result.Ok();
+            return Result.Fail("Falha no Logout!");
         }
     }
 }
