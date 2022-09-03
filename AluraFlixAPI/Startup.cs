@@ -35,6 +35,7 @@ namespace AluraFlixAPI
                 .AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<VideoService, VideoService>();
             services.AddScoped<CategoriaService, CategoriaService>();
+            services.AddScoped<UsuarioService, UsuarioService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

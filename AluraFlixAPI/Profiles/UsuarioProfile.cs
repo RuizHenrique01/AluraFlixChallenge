@@ -1,6 +1,7 @@
 ﻿using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace AluraFlixAPI.Profiles
 {
@@ -9,6 +10,7 @@ namespace AluraFlixAPI.Profiles
         public UsuarioProfile()
         {
             CreateMap<CreateUsuarioDto, Usuario>();
+            CreateMap<Usuario, IdentityUser<int>>();
         }
     }
 }
