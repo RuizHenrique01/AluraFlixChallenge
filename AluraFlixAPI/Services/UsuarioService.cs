@@ -11,11 +11,13 @@ namespace AluraFlixAPI.Services
     public class UsuarioService
     {
         private UserManager<IdentityUser<int>> _userManager;
+        private SignInManager<IdentityUser<int>> _signInManager;
         private IMapper _mapper;
 
-        public UsuarioService(UserManager<IdentityUser<int>> userManager, IMapper mapper)
+        public UsuarioService(UserManager<IdentityUser<int>> userManager, SignInManager<IdentityUser<int>> signInManager, IMapper mapper)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _mapper = mapper;
         }
 
@@ -27,5 +29,26 @@ namespace AluraFlixAPI.Services
             if (identityResult.Result.Succeeded) return Result.Ok();
             return Result.Fail("Erro ao criar usuário!");
         } 
+
+        public Result Login(LoginRequest loginRequest)
+        {
+            var user = _userManager.FindByEmailAsync(loginRequest.Email);
+
+            if(user == null)
+            {
+                return Result.Fail("Email/senha incorreto!");
+            }
+
+            var result = _signInManager.PasswordSignInAsync(user.Result.UserName, loginRequest.Password, false, false);
+
+            if (result.Result.Succeeded)
+            {
+
+                return Result.Ok();
+
+            }
+
+            return Result.Fail("Email/senha incorreto!");
+        }
     }
 }

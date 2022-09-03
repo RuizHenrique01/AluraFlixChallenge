@@ -24,5 +24,15 @@ namespace AluraFlixAPI.Controllers
             return Ok();
 
         }
+
+        [Route("/login")]
+        [HttpPost]
+        public IActionResult LoginUsuario([FromBody] LoginRequest loginRequest)
+        {
+            Result result = _usuarioService.Login(loginRequest);
+            if (result.IsFailed) return BadRequest(result.Errors[0]);
+            return Ok();
+
+        }
     }
 }
