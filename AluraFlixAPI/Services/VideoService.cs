@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using AluraFlixAPI.Data;
 using AluraFlixAPI.Data.Dtos;
+using AluraFlixAPI.Helpers;
 using AluraFlixAPI.Models;
 using AutoMapper;
 using FluentResults;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AluraFlixAPI.Services{
     public class VideoService{
@@ -34,17 +36,17 @@ namespace AluraFlixAPI.Services{
            return _mapper.Map<ReadVideoDto>(video);
         }
 
-        public List<ReadVideoDto> FindAllVideos(string search = null)
+        public PagedList<ReadVideoDto> FindAllVideos(string search = null, int page = 1)
         {
             List<Video> videos = new List<Video>();
             if (search != null)
             {
                 videos = _context.Videos.Where(x => x.Titulo.ToUpper().Contains(search.ToUpper())).ToList();
-                return _mapper.Map<List<ReadVideoDto>>(videos);
+                return PagedList<ReadVideoDto>.ToPagedList(_mapper.Map<List<ReadVideoDto>>(videos), page, 5);
             }
 
             videos = _context.Videos.ToList();
-            return _mapper.Map<List<ReadVideoDto>>(videos);
+            return PagedList<ReadVideoDto>.ToPagedList(_mapper.Map<List<ReadVideoDto>>(videos), page, 5);
         }
 
         public Result UpdateVideo(int id, UpdateVideoDto updateVideoDto)
@@ -71,6 +73,12 @@ namespace AluraFlixAPI.Services{
             _context.SaveChanges();
 
             return Result.Ok();
+        }
+
+        public List<ReadVideoDto> FindAllVideosFree()
+        {
+            List<Video> videos = _context.Videos.Where(x => x.CategoriaId == 1).ToList();
+            return _mapper.Map<List<ReadVideoDto>>(videos);
         }
     }
 }

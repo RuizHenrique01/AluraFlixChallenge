@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using System.Data;
+using System.Text.Json;
 using AluraFlixAPI.Data.Dtos;
+using AluraFlixAPI.Helpers;
 using AluraFlixAPI.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +47,34 @@ namespace AluraFlixAPI.Controllers{
 
         [HttpGet]
         [Authorize(Roles = "admin, regular")]
-        public IActionResult FindAllVideos([FromQuery] string search){
-            List<ReadVideoDto> readVideoDto = _videoService.FindAllVideos(search);
+        public IActionResult FindAllVideos([FromQuery] string search, [FromQuery] int page = 1){
+            PagedList<ReadVideoDto> readVideoDto = _videoService.FindAllVideos(search, page);
+
+            var metaData = new
+            {
+                readVideoDto.CurrentPage,
+                readVideoDto.PageSize,
+                readVideoDto.TotalCount,
+                readVideoDto.TotalPages
+            };
+
+            var data = new
+            {
+                pagination = metaData,
+                videos = readVideoDto,
+            };
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            return Ok(data);
+        }
+
+        [HttpGet]
+        [Route("/[controller]/free")]
+        public IActionResult FindAllVideosFree()
+        {
+            List<ReadVideoDto> readVideoDto = _videoService.FindAllVideosFree();
+
             return Ok(readVideoDto);
         }
 
