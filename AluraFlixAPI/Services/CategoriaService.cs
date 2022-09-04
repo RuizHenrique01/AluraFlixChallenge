@@ -1,5 +1,6 @@
 ﻿using AluraFlixAPI.Data;
 using AluraFlixAPI.Data.Dtos;
+using AluraFlixAPI.Helpers;
 using AluraFlixAPI.Models;
 using AutoMapper;
 using FluentResults;
@@ -36,10 +37,10 @@ namespace AluraFlixAPI.Services
             return _mapper.Map<ReadCategoriaDto>(categoria);
         }
 
-        public List<ReadCategoriaDto> FindAllCategorias()
+        public PagedList<ReadCategoriaDto> FindAllCategorias(int page = 1)
         {
             List<Categoria> categorias = _context.Categorias.ToList();
-            return _mapper.Map<List<ReadCategoriaDto>>(categorias);
+            return PagedList<ReadCategoriaDto>.ToPagedList(_mapper.Map<List<ReadCategoriaDto>>(categorias), page, 5);
         }
 
         public Result UpdateCategoria(int id, UpdateCategoriaDto updateCategoriaDto)

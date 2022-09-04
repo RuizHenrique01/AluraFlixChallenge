@@ -1,9 +1,10 @@
 ﻿using AluraFlixAPI.Data.Dtos;
+using AluraFlixAPI.Helpers;
 using AluraFlixAPI.Services;
 using FluentResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
+using System.Text.Json;
 
 namespace AluraFlixAPI.Controllers
 {
@@ -49,9 +50,27 @@ namespace AluraFlixAPI.Controllers
 
         [HttpGet]
         [Authorize(Roles = "admin, regular")]
-        public IActionResult FindAllCategoria()
+        public IActionResult FindAllCategoria([FromQuery] int page = 1)
         {
-            return Ok(_categoriaService.FindAllCategorias());
+            PagedList<ReadCategoriaDto> categorias = _categoriaService.FindAllCategorias(page);
+
+            var metaData = new
+            {
+                categorias.CurrentPage,
+                categorias.PageSize,
+                categorias.TotalCount,
+                categorias.TotalPages
+            };
+
+            var data = new
+            {
+                pagination = metaData,
+                categorias
+            };
+
+            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
+
+            return Ok(data);
         }
 
         [HttpPut("{id}")]
