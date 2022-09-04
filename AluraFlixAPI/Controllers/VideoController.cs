@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Text.Json;
 using AluraFlixAPI.Data.Dtos;
 using AluraFlixAPI.Helpers;
@@ -68,6 +67,15 @@ namespace AluraFlixAPI.Controllers{
             Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(metaData));
 
             return Ok(data);
+        }
+
+        [HttpGet]
+        [Route("/[controller]/free")]
+        public IActionResult FindAllVideosFree()
+        {
+            List<ReadVideoDto> readVideoDto = _videoService.FindAllVideosFree();
+
+            return Ok(readVideoDto);
         }
 
         [HttpPut("{id}")]

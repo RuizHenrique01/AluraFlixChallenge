@@ -7,6 +7,7 @@ using AluraFlixAPI.Helpers;
 using AluraFlixAPI.Models;
 using AutoMapper;
 using FluentResults;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace AluraFlixAPI.Services{
     public class VideoService{
@@ -72,6 +73,12 @@ namespace AluraFlixAPI.Services{
             _context.SaveChanges();
 
             return Result.Ok();
+        }
+
+        public List<ReadVideoDto> FindAllVideosFree()
+        {
+            List<Video> videos = _context.Videos.Where(x => x.CategoriaId == 1).ToList();
+            return _mapper.Map<List<ReadVideoDto>>(videos);
         }
     }
 }
